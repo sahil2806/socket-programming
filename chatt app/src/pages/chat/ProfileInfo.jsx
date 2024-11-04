@@ -23,7 +23,7 @@ const ProfileInfo = () => {
     try {
       // Create an instance of axios with default config
       const axiosInstance = axios.create({
-        baseURL: 'http://localhost:8747',
+        baseURL: 'http://localhost:3000',
         withCredentials: true,
         headers: {
           'Content-Type': 'application/json',

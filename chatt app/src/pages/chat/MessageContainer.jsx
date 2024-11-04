@@ -24,7 +24,7 @@ const MessageContainer = () => {
   useEffect(() => {
     const getMessages = async () => {
       try {
-        const response = await axios.post("http://localhost:8747/api/get-messages",{ _id: selectedChatData._id },{ withCredentials: true });
+        const response = await axios.post("http://localhost:3000/api/get-messages",{ _id: selectedChatData._id },{ withCredentials: true });
         // const response = await apiClient.post(
         //   GET_ALL_MESSAGES_ROUTE,
         //   { _id: selectedChatData._id },
@@ -39,7 +39,7 @@ const MessageContainer = () => {
     };
     const getChannelMessages=async ()=>{
       try{
-        const response = await axios.get(`http://localhost:8747/api/get-channel-messages/${selectedChatData._id}`,{ withCredentials: true });
+        const response = await axios.get(`http://localhost:3000/api/get-channel-messages/${selectedChatData._id}`,{ withCredentials: true });
         // const response = await apiClient.get(`${GET_ALL_CHANNEL_MESSAGES}/${selectedChatData._id}`, { withCredentials: true });
         // console.log(response)
         if(response.data.messages){

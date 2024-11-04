@@ -29,10 +29,14 @@ const App = () => {
   const [loading,setLoading] = useState(true);
 
   useEffect(() => {
+    const storedToken = localStorage.getItem('authToken');
+
+     
+
     const getUserData = async () => {
       try {
-        const response = await axios.get("http://localhost:8747/api/user-info", { withCredentials: true });
-         
+        const response = await axios.get("http://localhost:3000/api/user-info", { withCredentials: true });
+        
         if (response.status === 201 && response.data?.data?._id) {
           setUserInfo(response.data.data);
         } else {
@@ -48,6 +52,11 @@ const App = () => {
   
     if (!userInfo) {
       setLoading(true);   // Start loading before fetching data
+      // if (!storedToken) {
+      //   setLoading(false);
+      //   setUserInfo(undefined);
+      //   return;
+      // }
       getUserData();
     }
   }, [userInfo, setUserInfo]);

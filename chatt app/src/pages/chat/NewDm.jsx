@@ -33,7 +33,7 @@ const NewDm = () => {
   const searchContacts = async (searchTerm) => {
     if (searchTerm.length > 0) {
       try {
-        const response = await axios.post("http://localhost:8747/api/search",{ searchData: searchTerm },{ withCredentials: true });
+        const response = await axios.post("http://localhost:3000/api/search",{ searchData: searchTerm },{ withCredentials: true });
         // const response = await apiClient.post(
         //   SEARCH_CONTACT_ROUTE,
         //   { searchData: searchTerm },

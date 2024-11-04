@@ -8,9 +8,15 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    googleId: {
+        type: String,
+        required: false,
+        unique: true,
+        default : null
+    },
     password: {
         type: String,
-        required: true,
+        required: false,
     },
     firstName: {
         type: String,
@@ -35,6 +41,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required:false,
     }
+
 }, { timestamps: true });
 
 userSchema.pre('save', async function (next) {

@@ -2,12 +2,12 @@
 /* eslint-disable no-unused-vars */
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useAppStore } from "@/store";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs';
+import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import axios from 'axios';
-import {useAppStore} from "@/store";
 
 const AuthForm = ({
   activeTab,
@@ -23,8 +23,8 @@ const AuthForm = ({
   const [isSignup, setIsSignup] = useState(false);
   const navigate = useNavigate();
 
-  const {setUserInfo} = useAppStore();
-  
+  const { setUserInfo } = useAppStore();
+
 
   const validateLogin = () => {
     if (!email || !password) {
@@ -46,32 +46,41 @@ const AuthForm = ({
     return true;
   };
 
+  const GooglehandleLogin = async () => {
+    try {
+      
+      window.location.href = "http://localhost:3000/api/auth/google";
+    } catch (error) {
+      console.error(error);
+      toast.error('Sign in failed');
+    }
+  }
 
-    const handleLogin = async () => {
-      if (!validateLogin()) return;
-      try {
-        const response = await axios.post("http://localhost:8747/api/signin",{ email, password },{ withCredentials: true });
-        if (response.data?.data?._id) {
-          setUserInfo(response.data.data);
-          navigate(response.data.data.defaultProfile === false ? '/profile' : '/chat');
-        }
-      } catch (error) {
-        toast.error('Signin failed');
+  const handleLogin = async () => {
+    if (!validateLogin()) return;
+    try {
+      const response = await axios.post("http://localhost:3000/api/signin", { email, password }, { withCredentials: true });
+      if (response.data?.data?._id) {
+        setUserInfo(response.data.data);
+        navigate(response.data.data.defaultProfile === false ? '/profile' : '/chat');
       }
-    };
+    } catch (error) {
+      toast.error('Signin failed');
+    }
+  };
 
-    const handleSignup = async () => {
-      if (!validateSignup()) return;
-      try {
-        const response = await axios.post("http://localhost:8747/api/signup",{ email, password },{ withCredentials: true });
-        if (response.status === 201) {
-          setUserInfo(response.data.data);
-          navigate('/profile');
-        }
-      } catch (error) {
-        toast.error('Signup failed');
+  const handleSignup = async () => {
+    if (!validateSignup()) return;
+    try {
+      const response = await axios.post("http://localhost:3000/api/signup", { email, password }, { withCredentials: true });
+      if (response.status === 201) {
+        setUserInfo(response.data.data);
+        navigate('/profile');
       }
-    };
+    } catch (error) {
+      toast.error('Signup failed');
+    }
+  };
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -108,6 +117,7 @@ const AuthForm = ({
           className="w-full px-4 py-3 rounded-xl border border-gray-300 shadow-md focus:border-purple-500 focus:ring-2 focus:ring-purple-600"
         />
         <Button onClick={handleLogin} className="rounded-2xl cursor-pointer px-4 py-3">Login</Button>
+        <Button onClick={GooglehandleLogin} className="rounded-2xl cursor-pointer px-4 py-3">Google Auth</Button>
       </TabsContent>
 
       <TabsContent className="flex flex-col w-full gap-5" value="signup">

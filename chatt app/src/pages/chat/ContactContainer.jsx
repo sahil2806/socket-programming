@@ -21,7 +21,7 @@ const ContactContainer = () => {
   useEffect(() => {
     const getContacts = async () => {
       try {
-        const response = await axios.get("http://localhost:8747/api/get-ALL-ContactDMList",{ withCredentials: true });
+        const response = await axios.get("http://localhost:3000/api/get-ALL-ContactDMList",{ withCredentials: true });
         // const response = await apiClient.get(GET_ALL_CONTACT_DMLIST, {
         //   withCredentials: true,
         // });
@@ -35,7 +35,7 @@ const ContactContainer = () => {
     };
     const getUserChannels = async () => {
       try {
-        const response = await axios.get("http://localhost:8747/api/get-channels",{ withCredentials: true });
+        const response = await axios.get("http://localhost:3000/api/get-channels",{ withCredentials: true });
         // const response = await apiClient.get(GET_USER_CHANNELS_ROUTE, {
         //   withCredentials: true,
         // });

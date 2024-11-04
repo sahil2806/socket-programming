@@ -5,7 +5,40 @@ import { SearchContacts, getAllContacts, getContacts } from "../controllers/Cont
 import { getMessages, uploadFiles } from "../controllers/MessageController.js";
 import { isAuthenticated } from '../middlewares/AuthMiddleware.js';
 
+import { failureGoogleLogin, successGoogleLogin } from "../controllers/GoogleAuthController.js";
+
 const Router = express.Router();
+
+import passport from 'passport';
+import '../passport.js';
+
+Router.use(passport.initialize());
+Router.use(passport.session());
+
+
+// Auth 
+Router.get('/auth/google', passport.authenticate('google', {
+	scope:
+		['email', 'profile']
+}));
+
+// Auth Callback 
+Router.get('/auth/google/callback',
+	passport.authenticate('google', {
+	  failureRedirect: '/api/failure',
+	  session: true
+	}),
+	(req, res) => {
+	  // Successful authentication
+	  // res.redirect('http://localhost:5173/api/chat'); // Adjust the frontend URL as needed
+	}
+  );
+
+// Success 
+Router.get('/success', successGoogleLogin);
+
+// failure 
+Router.get('/failure', failureGoogleLogin);
 
 // Auth Routes
 Router.post('/signup',signup);

@@ -33,7 +33,7 @@ const CreateChannel = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const response = await axios.get("http://localhost:8747/api/get-all-contacts", { withCredentials: true });
+      const response = await axios.get("http://localhost:3000/api/get-all-contacts", { withCredentials: true });
       // const response = await apiClient.get(GET_ALL_CONTACT_INFO, {
       //   withCredentials: true,
       // });
@@ -45,7 +45,7 @@ const CreateChannel = () => {
   const createChannel = async () => {
     try {
       if (channelName.length > 0) {
-        const response = await axios.post("http://localhost:8747/api/create-channel", 
+        const response = await axios.post("http://localhost:3000/api/create-channel", 
         {
           name: channelName,
           members: selectedContacts.map((contact) => contact.value),

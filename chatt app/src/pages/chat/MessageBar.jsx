@@ -9,7 +9,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { GrAttachment } from "react-icons/gr";
 import { IoSend } from "react-icons/io5";
 import { RiEmojiStickerLine } from "react-icons/ri";
-
+import { toast } from "sonner";
 const MessageBar = () => {
   const [message, setMessage] = useState("");
   const {
@@ -66,26 +66,56 @@ const MessageBar = () => {
       setMessage("");
     }
   };
-  console.log( )
+  
   const handleAttachmentClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
+  // const uploadFileToCloudinary = async (file) => {
+  //   setIsUploading(true);
+  //   let formData = new FormData();
+  //   formData.append("file", file);
+  //   formData.append(
+  //     "upload_preset",
+  //     import.meta.env.VITE_CLOUDINARY_FILE_UPLOAD_PRESET
+  //   );
+
+  //   try {
+  //     const response = await axios.post(
+  //       `https://api.cloudinary.com/v1_1/${
+  //         import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+  //       }/image/upload`,
+  //       formData,
+  //       {
+  //         onUploadProgress: (data) => {
+  //           setFileUploadProgress(Math.round((100 * data.loaded) / data.total));
+  //         },
+  //       }
+  //     );
+  //     return response.data.secure_url;
+  //   } catch (e) {
+  //     console.log(e.message, "File Not Found");
+  //   } finally {
+  //     setIsUploading(false);
+  //   }
+  // };
+
   const uploadFileToCloudinary = async (file) => {
     setIsUploading(true);
     let formData = new FormData();
     formData.append("file", file);
     formData.append(
       "upload_preset",
-      import.meta.env.VITE_CLOUDINARY_FILE_UPLOAD_PRESET
+      import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
     );
 
     try {
+      const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+      const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+
       const response = await axios.post(
-        `https://api.cloudinary.com/v1_1/${
-          import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-        }/raw/upload`,
+        uploadUrl,
         formData,
         {
           onUploadProgress: (data) => {
@@ -93,7 +123,12 @@ const MessageBar = () => {
           },
         }
       );
-      return response.data.secure_url;
+      
+      if (response.data && response.data.secure_url) {
+        return response.data.secure_url;
+      } else {
+        throw new Error('Upload response missing secure_url');
+      }
     } catch (e) {
       console.log(e.message, "File Not Found");
     } finally {
@@ -105,6 +140,7 @@ const MessageBar = () => {
     const file = e.target.files[0];
     try {
       const attachmentUrl = await uploadFileToCloudinary(file);
+      console.log("attachmentUrl" + attachmentUrl);
       if (attachmentUrl.length > 0) {
         if (selectedChatType === "contact") {
           socket.emit("sendMessage", {
@@ -125,7 +161,7 @@ const MessageBar = () => {
         }
       }
     } catch (err) {
-      console.log(err.message);
+      console.log(err);
     }
   };
   const handleKeyPress = (e) => {

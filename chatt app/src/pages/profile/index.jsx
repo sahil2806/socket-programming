@@ -34,7 +34,8 @@ const Profile = () => {
     const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
 
     try {
-      const response = await axios.post(uploadUrl, formData, {
+      const response = await axios.post(uploadUrl, formData,
+         {
         // headers: {
         //   'Content-Type': 'multipart/form-data',
         // },
@@ -140,13 +141,11 @@ const Profile = () => {
   };
 
   const handleSubmit = async () => {
-    console.log(firstName)
-    console.log(lastName)
-    console.log(image)
+    
     if (validateProfile()) {
       try {
         const response = await axios.post(
-          "http://localhost:8747/api/update-profile",
+          "http://localhost:3000/api/update-profile",
           { firstName: firstName.trim(), lastName: lastName.trim(), color, image },
           { withCredentials: true }
         );
